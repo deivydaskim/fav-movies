@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { MovieModule } from './movie/movie.module';
 import { AuthModule } from './auth/auth.module';
@@ -20,10 +18,8 @@ import authConfig from './configs/auth.config';
       inject: [ConfigService],
     }),
     UserModule,
-    MovieModule,
     AuthModule,
+    MovieModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
