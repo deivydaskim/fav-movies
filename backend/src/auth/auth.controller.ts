@@ -1,11 +1,21 @@
-import { Controller, Request, Post, UseGuards } from '@nestjs/common';
+import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { AuthService } from './auth.service';
+import { AuthDto } from './dto/auth.dto';
 
 @Controller('auth')
 export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
+  @Post('register')
+  async register(@Body() authDto: AuthDto) {
+    return this.authService.register(authDto);
+  }
+
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  async login(@Request() req) {
-    return req.user;
+  // authDto for validating incoming data. should be better solution?
+  async(@Body() authDto: AuthDto, @Request() req: Request) {
+    return this.authService.login(req.user);
   }
 }

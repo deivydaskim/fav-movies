@@ -7,11 +7,13 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getTypeOrmConfig } from './configs/typeorm.config';
+import authConfig from './configs/auth.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [authConfig],
     }),
     TypeOrmModule.forRootAsync({
       useFactory: getTypeOrmConfig,
