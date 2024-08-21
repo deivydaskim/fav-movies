@@ -1,17 +1,21 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Layout from './Layout';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';import Layout from './Layout';
 import Home from './pages/Home';
 import Details from './pages/Details';
 import Error from './pages/Error';
 
 import { movieLoader, seriesLoader } from './services/loaders';
+import Authentication from './pages/Authentication';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
     children: [
-      { path: '/', element: <Home /> },
+      { index: true, element: <Home /> },
+      {
+        path: 'auth',
+        element: <Authentication />,
+      },
       {
         path: 'movie/:id',
         element: <Details />,
