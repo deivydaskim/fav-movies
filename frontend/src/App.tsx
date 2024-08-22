@@ -6,6 +6,8 @@ import Error from './pages/Error';
 import { authCheckLoader, movieLoader, seriesLoader } from './services/loaders';
 import Authentication from './pages/Authentication';
 import { authAction } from './services/actions';
+import ProtectedRoute from './components/ProtectedRoute';
+import Favorite from './pages/Favorite';
 
 const router = createBrowserRouter([
   {
@@ -17,7 +19,7 @@ const router = createBrowserRouter([
         path: 'auth',
         element: <Authentication />,
         loader: authCheckLoader,
-        action: authAction
+        action: authAction,
       },
       {
         path: 'movie/:id',
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
         element: <Details />,
         loader: seriesLoader,
         errorElement: <Error />,
+      },
+      {
+        path: 'favorite',
+        element: (
+          <ProtectedRoute redirectTo={'/'}>
+            <Favorite />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '*',
