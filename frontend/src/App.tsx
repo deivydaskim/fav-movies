@@ -3,7 +3,7 @@ import Home from './pages/Home';
 import Details from './pages/Details';
 import Error from './pages/Error';
 
-import { movieLoader, seriesLoader } from './services/loaders';
+import { authCheckLoader, movieLoader, seriesLoader } from './services/loaders';
 import Authentication from './pages/Authentication';
 import { authAction } from './services/actions';
 
@@ -16,6 +16,7 @@ const router = createBrowserRouter([
       {
         path: 'auth',
         element: <Authentication />,
+        loader: authCheckLoader,
         action: authAction
       },
       {

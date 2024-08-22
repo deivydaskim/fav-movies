@@ -1,16 +1,20 @@
 import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import logo from '../assets/icons/logo.svg';
 import searchIcon from '../assets/icons/search-icon.svg';
 import SearchResults from './SearchResults';
 import { getSearchResults } from '../services/MoviesAPI';
 import { debounce } from '../utils/utils';
+import { useAuth } from '../hooks/useAuth';
 
 const Header: React.FC = () => {
   const [searchData, setSearchData] = useState<Search | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
+  const { isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -35,6 +39,11 @@ const Header: React.FC = () => {
   };
 
   const handleDebouncedSearch = debounce(handleSearch, 500);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   const resetSearch = () => {
     inputRef.current!.value = '';
@@ -67,7 +76,13 @@ const Header: React.FC = () => {
           error={error}
         />
       </div>
-      <Link to='/auth?mode=login' className=''>LOGIN</Link>
+      {!isAuthenticated() ? (
+        <Link to="/auth?mode=login" className="">
+          <button>LOGIN</button>
+        </Link>
+      ) : (
+        <button onClick={handleLogout}>LOGOUT</button>
+      )}
     </header>
   );
 };

@@ -1,8 +1,19 @@
-interface AuthSuccessResponse {
-  access_token: string;
+interface AuthContextType {
+  user: string | null;
+  login: (username: string, password: string) => void;
+  logout: () => void;
+  isAuthenticated: () => boolean;
 }
 
-interface ErrorResponse {
+type AuthResponse = AuthSuccessResponse | AuthErrorResponse;
+
+interface AuthSuccessResponse {
+  username: string;
+  access_token: string;
+  message?: string;
+}
+
+interface AuthErrorResponse {
   error: string;
   message: string;
   statusCode: number;

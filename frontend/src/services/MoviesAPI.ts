@@ -1,3 +1,5 @@
+import { LoaderFunctionArgs } from "react-router-dom";
+
 const ACCESS_TOKEN = import.meta.env.VITE_ACCESS_TOKEN;
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -30,6 +32,17 @@ const fetchData = async <T>(
   }
 };
 
+const fetchDataForDetails = async <T>(
+  endpoint: string,
+  params: LoaderFunctionArgs
+): Promise<T> => {
+  const { id } = params.params;
+  const url = `${BASE_URL}${endpoint}/${id}?append_to_response=credits`;
+
+  return await fetchData<T>(url);
+};
+
+
 const getMedia = async (page = 1, resource: string) => {
   const url = `${BASE_URL}/${resource}?language=en-US&page=${page}`;
   return fetchData<MediaResult<Movie | TV>>(url);
@@ -40,4 +53,4 @@ const getSearchResults = async (query: string) => {
   return fetchData(url);
 };
 
-export { getMedia, getSearchResults, fetchData };
+export { getMedia, getSearchResults, fetchData, fetchDataForDetails };

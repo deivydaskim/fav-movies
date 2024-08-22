@@ -30,5 +30,12 @@ export const authAction: ActionFunction = async ({ request }) => {
     throw json({ message: 'Could not authentcicate' }, { status: 500 });
   }
 
-  return response;
+  if (mode === 'register') {
+    return json({ message: 'Registration successful, please log in.' });
+  }
+
+  const resData = await response.json();
+  const token = resData.access_token;
+
+  return json({ access_token: token, username: authData.username });
 };
