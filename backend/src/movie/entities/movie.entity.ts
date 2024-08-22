@@ -16,6 +16,9 @@ export class Movie {
   @Column()
   releaseDate: Date;
 
+  @Column()
+  imageUrl: string;
+
   @ManyToOne(() => User, (user) => user.movies, { onDelete: 'CASCADE' })
   @Exclude() // Exclude user data when object is serialized
   user: User;

@@ -15,4 +15,9 @@ export class CreateMovieDto {
   @ApiProperty()
   @IsDateString()
   releaseDate: Date;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  imageUrl: string;
 }
