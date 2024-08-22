@@ -67,6 +67,7 @@ const Header: React.FC = () => {
           error={error}
         />
       </div>
+      <Link to='/auth?mode=login' className=''>LOGIN</Link>
     </header>
   );
 };

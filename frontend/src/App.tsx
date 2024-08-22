@@ -5,6 +5,7 @@ import Error from './pages/Error';
 
 import { movieLoader, seriesLoader } from './services/loaders';
 import Authentication from './pages/Authentication';
+import { authAction } from './services/actions';
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
       {
         path: 'auth',
         element: <Authentication />,
+        action: authAction
       },
       {
         path: 'movie/:id',
