@@ -1,4 +1,5 @@
-interface AuthContextType {  user: string | null;
+interface AuthContextType {
+  user: string | null;
   login: (username: string, password: string) => void;
   logout: () => void;
   isAuthenticated: () => boolean;
@@ -19,10 +20,16 @@ interface AuthErrorResponse {
 }
 
 //Favorite movies
-interface FavoriteItem {
+interface FavMovie {
   id: number;
   title: string;
   description: string;
   releaseDate: string;
   imageUrl: string;
+}
+
+interface MovieState {
+  items: FavMovie[];
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  error: string | null;
 }
