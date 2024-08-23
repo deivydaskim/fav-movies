@@ -17,25 +17,29 @@ const FavoriteItem: React.FC<FavoriteItemProps> = ({ details }) => {
   };
 
   return (
-    <li className="flex p-2 border-[1px] border-white/10 rounded-md">
-      <div className="flex flex-1 gap-4">
-        <img
-          className="h-80 w-56 object-cover rounded-sm"
-          src={details.imageUrl}
-          alt={details.title}
-        />
-        <div className="flex flex-col justify-between py-1">
-          <div className="space-y-2">
+    <li className="flex p-3 border-[1px] border-white/10 rounded-md">
+      <div className="flex sm:flex-row flex-col flex-1 gap-4">
+        <div className="md:self-auto self-center min-w-60 flex-shrink-0">
+          <img
+            className="rounded-xl min-h-60 w-64"
+            src={details.imageUrl}
+            alt={details.title}
+          />
+        </div>
+        <div className="flex flex-col justify-between py-1 gap-4">
+          <div className="space-y-4">
             <h1 className="headline-m">{details.title}</h1>
             <p className="body-2">{details.description}</p>
           </div>
-          <p className="body-2">{formatDate(details.releaseDate)}</p>
+          <p className="body-2 text-gray-300">
+            {formatDate(details.releaseDate)}
+          </p>
         </div>
       </div>
       <div className="flex flex-col justify-between">
         <button
           onClick={handleDelete}
-          className="border-[1px] border-yellow-350 rounded-md text-2xl w-8 self-end"
+          className="border-[1px] border-white/0 transition-all hover:border-yellow-350 hover:text-yellow-350  rounded-md text-2xl w-8 self-end"
         >
           &times;
         </button>
