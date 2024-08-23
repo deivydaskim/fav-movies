@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { getAuthToken } from '../utils/auth';
@@ -68,6 +69,7 @@ const initialState: MovieState = {
   items: [],
   status: 'idle',
   error: null,
+  searchQuery: '',  // Add search query state
 };
 
 const movieSlice = createSlice({
@@ -86,6 +88,9 @@ const movieSlice = createSlice({
           new Date(a.releaseDate).getFullYear() -
           new Date(b.releaseDate).getFullYear()
       );
+    },
+    setSearchQuery(state, action: PayloadAction<string>) {
+      state.searchQuery = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -129,6 +134,6 @@ const movieSlice = createSlice({
   },
 });
 
-export const { sortMoviesByTitle, sortMoviesById, sortMoviesByYear } = movieSlice.actions;
+export const { sortMoviesByTitle, sortMoviesById, sortMoviesByYear, setSearchQuery } = movieSlice.actions;
 
 export default movieSlice.reducer;

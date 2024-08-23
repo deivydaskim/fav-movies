@@ -32,4 +32,5 @@ interface MovieState {
   items: FavMovie[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
+  searchQuery: string;
 }

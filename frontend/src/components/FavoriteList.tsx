@@ -8,6 +8,9 @@ import Spinner from './Spinner';
 const FavoriteList: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const movies = useSelector((state: RootState) => state.movies.items);
+  const searchQuery = useSelector(
+    (state: RootState) => state.movies.searchQuery
+  );
   const error = useSelector((state: RootState) => state.movies.error);
   const movieStatus = useSelector((state: RootState) => state.movies.status);
 
@@ -24,14 +27,18 @@ const FavoriteList: React.FC = () => {
   if (movieStatus == 'loading') {
     return (
       <div className="z-20 inset-0 grid place-items-center mt-20">
-          <Spinner />
-        </div>
+        <Spinner />
+      </div>
     );
   }
 
+  const filteredMovies = movies.filter((movie) =>
+    movie.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <ul className="my-2 space-y-2">
-      {movies.map((movie) => (
+      {filteredMovies.map((movie) => (
         <FavoriteItem key={movie.id} details={movie} />
       ))}
     </ul>
