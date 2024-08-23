@@ -1,15 +1,26 @@
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { deleteMovie } from '../store/favoriteSlice';
 import { formatDate } from '../utils/utils';
+import { AppDispatch } from '../store/store';
+import FavoriteModal from './FavoriteModal';
 
 interface FavoriteItemProps {
-  details: FavoriteItem;
+  details: FavMovie;
 }
 
 const FavoriteItem: React.FC<FavoriteItemProps> = ({ details }) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleDelete = () => {
+    dispatch(deleteMovie(details.id));
+  };
+
   return (
     <li className="flex p-2 border-[1px] border-white/10 rounded-md">
       <div className="flex flex-1 gap-4">
         <img
-          className="max-h-80 rounded-sm"
+          className="h-80 w-56 object-cover rounded-sm"
           src={details.imageUrl}
           alt={details.title}
         />
@@ -18,14 +29,17 @@ const FavoriteItem: React.FC<FavoriteItemProps> = ({ details }) => {
             <h1 className="headline-m">{details.title}</h1>
             <p className="body-2">{details.description}</p>
           </div>
-          <p className="body-2">
-            Release date: {formatDate(details.releaseDate)}
-          </p>
+          <p className="body-2">{formatDate(details.releaseDate)}</p>
         </div>
       </div>
       <div className="flex flex-col justify-between">
-        <button className='border-[1px] border-yellow-350 rounded-md'>X</button>
-        <button className='text-yellow-350'>Edit</button>
+        <button
+          onClick={handleDelete}
+          className="border-[1px] border-yellow-350 rounded-md text-2xl w-8 self-end"
+        >
+          &times;
+        </button>
+        <FavoriteModal title="EDIT" mode="edit" data={details} />
       </div>
     </li>
   );

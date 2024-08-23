@@ -1,93 +1,38 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store/store';
+import { fetchMovies } from '../store/favoriteSlice';
 import FavoriteItem from './FavoriteItem';
+import Spinner from './Spinner';
 
 const FavoriteList: React.FC = () => {
-  const mockData = [
-    {
-      id: 1,
-      title: 'Movie title',
-      description: 'Some text about movie',
-      releaseDate: '2021-08-09T21:00:00.000Z',
-      imageUrl:
-        'https://image.tmdb.org/t/p/w300//8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
-    },
-    {
-      id: 2,
-      title: 'Movie title',
-      description: 'Some text about movie',
-      releaseDate: '2021-08-09T21:00:00.000Z',
-      imageUrl:
-        'https://image.tmdb.org/t/p/w300//8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
-    },
-    {
-      id: 3,
-      title: 'Movie title',
-      description: 'Some text about movie',
-      releaseDate: '2021-08-09T21:00:00.000Z',
-      imageUrl:
-        'https://image.tmdb.org/t/p/w300//8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
-    },
-    {
-      id: 4,
-      title: 'Movie title',
-      description: 'Some text about movie',
-      releaseDate: '2021-08-09T21:00:00.000Z',
-      imageUrl:
-        'https://image.tmdb.org/t/p/w300//8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
-    },
-    {
-      id: 5,
-      title: '1',
-      description: 'Some text about movie',
-      releaseDate: '2021-08-09T21:00:00.000Z',
-      imageUrl:
-        'https://image.tmdb.org/t/p/w300//8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
-    },
-    {
-      id: 6,
-      title: '2',
-      description: 'Some text about movie',
-      releaseDate: '2021-08-09T21:00:00.000Z',
-      imageUrl:
-        'https://image.tmdb.org/t/p/w300//8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
-    },
-    {
-      id: 7,
-      title: '3',
-      description: 'Some text about movie',
-      releaseDate: '2021-08-09T21:00:00.000Z',
-      imageUrl:
-        'https://image.tmdb.org/t/p/w300//8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
-    },
-    {
-      id: 8,
-      title: '4',
-      description: 'Some text about movie',
-      releaseDate: '2021-08-09T21:00:00.000Z',
-      imageUrl:
-        'https://image.tmdb.org/t/p/w300//8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
-    },
-    {
-      id: 9,
-      title: '5',
-      description: 'Some text about movie',
-      releaseDate: '2021-08-09T21:00:00.000Z',
-      imageUrl:
-        'https://image.tmdb.org/t/p/w300//8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
-    },
-    {
-      id: 10,
-      title: '6',
-      description: 'Some text about movie',
-      releaseDate: '2021-08-09T21:00:00.000Z',
-      imageUrl:
-        'https://image.tmdb.org/t/p/w300//8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
-    },
-  ];
+  const dispatch: AppDispatch = useDispatch();
+  const movies = useSelector((state: RootState) => state.movies.items);
+  const error = useSelector((state: RootState) => state.movies.error);
+  const movieStatus = useSelector((state: RootState) => state.movies.status);
+
+  useEffect(() => {
+    if (movieStatus === 'idle') {
+      dispatch(fetchMovies());
+    }
+  }, [dispatch, movieStatus]);
+
+  if (error) {
+    return <p className="text-center my-10">{error}</p>;
+  }
+
+  if (movieStatus == 'loading') {
+    return (
+      <div className="z-20 inset-0 grid place-items-center mt-20">
+          <Spinner />
+        </div>
+    );
+  }
 
   return (
     <ul className="my-2 space-y-2">
-      {mockData.map((item) => (
-        <FavoriteItem key={item.id} details={item} />
+      {movies.map((movie) => (
+        <FavoriteItem key={movie.id} details={movie} />
       ))}
     </ul>
   );

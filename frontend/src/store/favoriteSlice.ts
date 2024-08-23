@@ -21,7 +21,8 @@ export const addMovie = createAsyncThunk<FavMovie, FavMovie>(
   'movies/addMovie',
   async (movie) => {
     const authToken = getAuthToken();
-    const response = await axios.post<FavMovie>(API_URL, movie, {
+    const { id, ...destructedMovie } = movie;
+    const response = await axios.post<FavMovie>(API_URL, destructedMovie, {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
@@ -90,7 +91,7 @@ const movieSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch movies';
       })
       .addCase(addMovie.fulfilled, (state, action: PayloadAction<FavMovie>) => {
-        state.items.push(action.payload);
+        state.items.unshift(action.payload);
       })
       .addCase(
         updateMovie.fulfilled,
