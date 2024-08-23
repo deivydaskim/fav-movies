@@ -73,7 +73,21 @@ const initialState: MovieState = {
 const movieSlice = createSlice({
   name: 'movies',
   initialState,
-  reducers: {},
+  reducers: {
+    sortMoviesByTitle(state) {
+      state.items.sort((a, b) => a.title.localeCompare(b.title));
+    },
+    sortMoviesById(state) {
+      state.items.sort((a, b) => a.id - b.id);
+    },
+    sortMoviesByYear(state) {
+      state.items.sort(
+        (a, b) =>
+          new Date(a.releaseDate).getFullYear() -
+          new Date(b.releaseDate).getFullYear()
+      );
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMovies.pending, (state) => {
@@ -114,5 +128,7 @@ const movieSlice = createSlice({
       );
   },
 });
+
+export const { sortMoviesByTitle, sortMoviesById, sortMoviesByYear } = movieSlice.actions;
 
 export default movieSlice.reducer;
