@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
-import { fetchMovies, clearCrudError } from '../store/favoriteSlice';
+import { fetchMovies } from '../store/favoriteSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FavoriteItem from './FavoriteItem';
 import Spinner from './Spinner';
-import Modal from './Modal';
 import Reconnect from './Reconnect';
 import Pagination from './Pagination';
 
@@ -19,9 +18,6 @@ const FavoriteList: React.FC = () => {
   );
   const error = useSelector((state: RootState) => state.movies.error);
   const movieStatus = useSelector((state: RootState) => state.movies.status);
-  const crudError = useSelector((state: RootState) => state.movies.crudError);
-
-  const [showPopup, setShowPopup] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -37,12 +33,6 @@ const FavoriteList: React.FC = () => {
     }
   }, [dispatch, movieStatus]);
 
-  useEffect(() => {
-    if (crudError) {
-      setShowPopup(true);
-    }
-  }, [crudError]);
-
   // Sync URL with current page
   useEffect(() => {
     navigate({ search: `?page=${currentPage}` });
@@ -55,11 +45,6 @@ const FavoriteList: React.FC = () => {
       navigate({ search: `?page=1` });
     }
   }, [searchQuery, currentPage, navigate]);
-
-  const handleClosePopup = () => {
-    setShowPopup(false);
-    dispatch(clearCrudError());
-  };
 
   if (movieStatus === 'loading') {
     return (
@@ -83,6 +68,7 @@ const FavoriteList: React.FC = () => {
     movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
+  // Show text if no content is visable
   if (filteredMovies.length === 0) {
     return (
       <h2 className="mt-8 text-center text-gray-300 body">
@@ -113,10 +99,6 @@ const FavoriteList: React.FC = () => {
           navigate({ search: `?page=${page}` });
         }}
       />
-
-      <Modal onClose={handleClosePopup} isOpen={showPopup}>
-        {crudError}
-      </Modal>
     </>
   );
 };

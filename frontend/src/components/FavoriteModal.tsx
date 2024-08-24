@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from './Modal';
 import FavoriteForm from './FavoriteForm';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store/store';
-import { addMovie, updateMovie } from '../store/favoriteSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store/store';
+import { addMovie, clearCrudError, updateMovie } from '../store/favoriteSlice';
 
 interface FavoriteModalProps {
   title: string;
@@ -28,12 +28,27 @@ const FavoriteModal: React.FC<FavoriteModalProps> = ({
   const [formData, setFormData] = useState<FavMovie>(data);
   const dispatch = useDispatch<AppDispatch>();
 
+  const crudError = useSelector((state: RootState) => state.movies.crudError);
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    if (crudError) {
+      setShowPopup(true);
+    }
+  }, [crudError]);
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    dispatch(clearCrudError());
   };
 
   const handleInputChange = (
@@ -81,6 +96,9 @@ const FavoriteModal: React.FC<FavoriteModalProps> = ({
           onInputChange={handleInputChange}
           mode={mode}
         />
+      </Modal>
+      <Modal onClose={handleClosePopup} isOpen={showPopup}>
+        {crudError}
       </Modal>
     </>
   );
