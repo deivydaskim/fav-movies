@@ -35,13 +35,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-black/50 z-20"
+      className="fixed inset-0 z-20 flex items-center justify-center bg-black/50"
       onClick={handleOutsideClick}
     >
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-4 relative max-h-[80vh] overflow-y-auto">
+      <div className="relative max-h-[80vh] w-full max-w-md overflow-y-auto rounded-lg bg-white p-4 text-black shadow-lg">
         <button
           onClick={onClose}
-          className="absolute text-3xl top-2 right-4 text-gray-600"
+          className="absolute right-4 top-2 text-3xl text-gray-600"
         >
           &times;
         </button>

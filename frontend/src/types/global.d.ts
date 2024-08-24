@@ -33,4 +33,6 @@ interface MovieState {
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
   searchQuery: string;
+  crudStatus: 'idle' | 'pending' | 'succeeded' | 'failed';
+  crudError: string | null;
 }

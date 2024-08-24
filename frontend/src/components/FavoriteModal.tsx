@@ -37,7 +37,7 @@ const FavoriteModal: React.FC<FavoriteModalProps> = ({
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -55,10 +55,10 @@ const FavoriteModal: React.FC<FavoriteModalProps> = ({
       if (mode === 'edit') {
         await dispatch(updateMovie({ movieId: formData.id, movie: formData }));
       }
-      handleCloseModal();
     } catch (error) {
       console.error(`Failed to ${mode} movie:`, error);
-      // add throwing error later
+    } finally {
+      handleCloseModal();
     }
   };
 

@@ -1,22 +1,22 @@
 import { useEffect, useState, useRef } from 'react';
 import { getMedia } from '../services/MoviesAPI';
 import Spinner from './Spinner';
-import errorLogo from '../assets/icons/plug-error-illustration.svg';
 import MediaListItem from './MediaListItem';
+import Reconnect from './Reconnect';
 
 interface MediaListProps {
   resource: 'movie/now_playing' | 'movie/upcoming' | 'tv/airing_today';
 }
 
 const getResourceType = (
-  resource: MediaListProps['resource']
+  resource: MediaListProps['resource'],
 ): 'movie' | 'series' => {
   return resource.startsWith('movie') ? 'movie' : 'series';
 };
 
 const MediaList: React.FC<MediaListProps> = ({ resource }) => {
   const [mediaData, setMediaData] = useState<MediaResult<Movie | TV> | null>(
-    JSON.parse(sessionStorage.getItem(resource) || 'null')
+    JSON.parse(sessionStorage.getItem(resource) || 'null'),
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -40,7 +40,7 @@ const MediaList: React.FC<MediaListProps> = ({ resource }) => {
 
           const uniqueResults = data.results.filter(
             (item) =>
-              !prevData.results.some((prevItem) => prevItem.id === item.id)
+              !prevData.results.some((prevItem) => prevItem.id === item.id),
           );
 
           const newData = {
@@ -65,7 +65,7 @@ const MediaList: React.FC<MediaListProps> = ({ resource }) => {
     const container = containerRef.current;
 
     const savedScrollPosition = sessionStorage.getItem(
-      `${resource}-scrollPosition`
+      `${resource}-scrollPosition`,
     );
     if (savedScrollPosition && container) {
       container.scrollLeft = parseInt(savedScrollPosition, 10);
@@ -79,7 +79,7 @@ const MediaList: React.FC<MediaListProps> = ({ resource }) => {
 
     sessionStorage.setItem(
       `${resource}-scrollPosition`,
-      container.scrollLeft.toString()
+      container.scrollLeft.toString(),
     );
 
     if (
@@ -96,13 +96,20 @@ const MediaList: React.FC<MediaListProps> = ({ resource }) => {
   }
 
   if (error) {
-    return <Error />;
+    return (
+      <div className="h-96 pt-8">
+        <h2 className="mb-4 text-center text-gray-200 headline-m">
+          {error?.message || 'Something went wrong'}
+        </h2>
+        <Reconnect />
+      </div>
+    );
   }
 
   return (
     <ul
       ref={containerRef}
-      className="my-9 flex overflow-x-scroll overflow-y-hidden gap-5"
+      className="my-9 flex gap-5 overflow-y-hidden overflow-x-scroll"
       onScroll={handleScroll}
     >
       {mediaData?.results.map((result) => (
@@ -126,26 +133,11 @@ const Skeleton = () => {
     <ul className="my-11 flex gap-5 overflow-hidden">
       {Array.from({ length: 10 }).map((_, index) => (
         <li className="first:ml-1" key={index}>
-          <div className="w-[185px] h-[278px] mb-3 rounded-lg bg-gray-700 animate-pulse"></div>
-          <div className="w-[185px] h-6 mb-9 rounded-lg bg-gray-700 animate-pulse"></div>
+          <div className="mb-3 h-[278px] w-[185px] animate-pulse rounded-lg bg-gray-700"></div>
+          <div className="mb-9 h-6 w-[185px] animate-pulse rounded-lg bg-gray-700"></div>
         </li>
       ))}
     </ul>
-  );
-};
-
-const Error = () => {
-  return (
-    <div className="h-96 pl-4 pt-10 flex flex-col max-w-56 m-auto items-center gap-3 body">
-      <h2 className="text-gray-200 text-center">Something went wrong...</h2>
-      <img className="text-center" src={errorLogo} alt="" />
-      <button
-        className="px-3 py-1 rounded-md bg-blue-950 w-max"
-        onClick={() => window.location.reload()}
-      >
-        Try reload page
-      </button>
-    </div>
   );
 };
 
