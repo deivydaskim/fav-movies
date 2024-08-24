@@ -1,12 +1,14 @@
 import { useLoaderData } from 'react-router-dom';
-
 import starIcon from '../assets/icons/star-icon.svg';
 import { formatDate, formatMinutes, getTitle, getYear } from '../utils/utils';
+import FavoriteModal from '../components/FavoriteModal';
+import { useAuth } from '../hooks/useAuth';
 
 type MediaDetails = MovieDetails | SeriesDetails;
 
 const Details = () => {
   const mediaDetails = useLoaderData() as MediaDetails;
+  const { isAuthenticated } = useAuth();
 
   const isMovie = 'title' in mediaDetails;
   const title = getTitle(mediaDetails);
@@ -14,12 +16,13 @@ const Details = () => {
   const runtimeOrSeasons = isMovie
     ? formatMinutes(mediaDetails.runtime)
     : `${mediaDetails.seasons.length} seasons`;
+  const imageUrl = `https://image.tmdb.org/t/p/w300/${mediaDetails.poster_path}`;
 
   const renderGenres = () =>
     mediaDetails.genres.map(({ id, name }) => (
       <li
         key={id}
-        className="lg:py-1 lg:px-4 py-0.5 px-2 border border-gray-500 rounded-full bg-gray-100/10"
+        className="rounded-full border border-gray-500 bg-gray-100/10 px-2 py-0.5 lg:px-4 lg:py-1"
       >
         {name}
       </li>
@@ -38,60 +41,72 @@ const Details = () => {
   const renderDirector = () => {
     if (isMovie) {
       const directors = mediaDetails.credits.crew.filter(
-        (member) => member.job === 'Director'
+        (member) => member.job === 'Director',
       );
-      return directors[0].name;
+      return directors[0]?.name;
     }
     if (mediaDetails.created_by.length > 0) {
       return mediaDetails.created_by.map((crew) => crew.name).join(', ');
     }
   };
 
+  const dataToSave: FavMovie = {
+    id: mediaDetails.id,
+    title: title as string,
+    description: mediaDetails.overview,
+    releaseDate: isMovie
+      ? mediaDetails.release_date
+      : mediaDetails.last_air_date,
+    imageUrl: imageUrl,
+  };
   return (
     <>
-      <section className="flex flex-col md:flex-row lg:px-28 px-6 gradient-gray md:py-10 py-4 mt-9 justify-between">
+      <section className="mt-9 flex flex-col justify-between px-6 py-4 gradient-gray md:flex-row md:py-10 lg:px-28">
         <div className="space-y-2">
-          <h3 className="body font-bold uppercase text-yellow-350">
+          <h3 className="font-bold uppercase text-yellow-350 body">
             {isMovie ? 'Movie' : 'Series'}
           </h3>
-          <h1 className="headline-xl font-semibold">{title}</h1>
+          <h1 className="font-semibold headline-xl">{title}</h1>
           <p className="caption-2">
             {year}
             <span className="inline-block w-4"></span>
             {runtimeOrSeasons}
           </p>
         </div>
-        <div className="flex gap-3 items-center flex-shrink-0 md:self-auto self-end">
+        <div className="flex flex-shrink-0 items-center gap-3 self-end md:self-auto">
+          {isAuthenticated() && (
+            <FavoriteModal
+              buttonTitle={'Favorite'}
+              mode="add"
+              data={dataToSave}
+            />
+          )}
           <div className="flex items-center">
             <img src={starIcon} className="w-10" alt="star icon" />
             <p className="headline-l">{mediaDetails.vote_average.toFixed(1)}</p>
           </div>
-          <p className="caption !lowercase text-gray-300">
+          <p className="!lowercase text-gray-300 caption">
             {mediaDetails.vote_count}
             <br />
             ratings
           </p>
         </div>
       </section>
-      <section className="lg:px-28 px-6 my-12 flex md:flex-row flex-col gap-8">
-        <div className="md:self-auto self-center min-w-60">
+      <section className="my-12 flex flex-col gap-8 px-6 md:flex-row lg:px-28">
+        <div className="min-w-60 self-center md:self-auto">
           {mediaDetails.poster_path ? (
-            <img
-              src={`https://image.tmdb.org/t/p/w300/${mediaDetails.poster_path}`}
-              alt={title}
-              className="rounded-xl w-64"
-            />
+            <img src={imageUrl} alt={title} className="w-64 rounded-xl" />
           ) : (
-            <div className="rounded-xl w-64 gradient-gray h-96 leading-[24rem] headline-m text-center select-none opacity-70">
+            <div className="h-96 w-64 select-none rounded-xl text-center leading-[24rem] opacity-70 gradient-gray headline-m">
               NO IMAGE
             </div>
           )}
         </div>
         <div className="space-y-6">
-          <ul className="flex gap-3 body-2 text-gray-300 flex-wrap">
+          <ul className="flex flex-wrap gap-3 text-gray-300 body-2">
             {renderGenres()}
           </ul>
-          <p className="body text-justify">{mediaDetails.overview}</p>
+          <p className="text-justify body">{mediaDetails.overview}</p>
           <div className="space-y-2 body-2">
             <p>
               <strong>Director: </strong>
@@ -110,7 +125,9 @@ const Details = () => {
             <p>
               <strong>Release Date: </strong>
               {formatDate(
-                isMovie ? mediaDetails.release_date : mediaDetails.last_air_date
+                isMovie
+                  ? mediaDetails.release_date
+                  : mediaDetails.last_air_date,
               )}
             </p>
           </div>

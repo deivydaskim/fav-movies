@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Modal from './Modal';
 import FavoriteForm from './FavoriteForm';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,7 +6,7 @@ import { AppDispatch, RootState } from '../store/store';
 import { addMovie, clearCrudError, updateMovie } from '../store/favoriteSlice';
 
 interface FavoriteModalProps {
-  title: string;
+  buttonTitle: string;
   data?: FavMovie;
   mode?: 'add' | 'edit';
 }
@@ -20,23 +20,15 @@ const initialData = {
 };
 
 const FavoriteModal: React.FC<FavoriteModalProps> = ({
-  title,
+  buttonTitle,
   data = initialData,
   mode = 'add',
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<FavMovie>(data);
+
   const dispatch = useDispatch<AppDispatch>();
-
   const crudError = useSelector((state: RootState) => state.movies.crudError);
-
-  const [showPopup, setShowPopup] = useState(false);
-
-  useEffect(() => {
-    if (crudError) {
-      setShowPopup(true);
-    }
-  }, [crudError]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -47,7 +39,6 @@ const FavoriteModal: React.FC<FavoriteModalProps> = ({
   };
 
   const handleClosePopup = () => {
-    setShowPopup(false);
     dispatch(clearCrudError());
   };
 
@@ -77,6 +68,8 @@ const FavoriteModal: React.FC<FavoriteModalProps> = ({
     }
   };
 
+  const isError = crudError !== null;
+
   const buttonStyle =
     mode === 'add'
       ? 'bg-yellow-350 text-black py-2 px-4 rounded-md'
@@ -85,7 +78,7 @@ const FavoriteModal: React.FC<FavoriteModalProps> = ({
   return (
     <>
       <button className={buttonStyle} onClick={handleOpenModal}>
-        {title}
+        {buttonTitle}
       </button>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
@@ -97,7 +90,7 @@ const FavoriteModal: React.FC<FavoriteModalProps> = ({
           mode={mode}
         />
       </Modal>
-      <Modal onClose={handleClosePopup} isOpen={showPopup}>
+      <Modal onClose={handleClosePopup} isOpen={isError}>
         {crudError}
       </Modal>
     </>

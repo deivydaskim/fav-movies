@@ -19,7 +19,7 @@ const FavoriteItem: React.FC<FavoriteItemProps> = ({ details }) => {
     dispatch(deleteMovie(details.id));
   };
 
-  const isDeleting = deleteStatus === 'pending';
+  const isDeleting = deleteStatus === 'pending'
 
   return (
     <li className={`flex rounded-md border-[1px] border-white/10 p-3`}>
@@ -49,7 +49,7 @@ const FavoriteItem: React.FC<FavoriteItemProps> = ({ details }) => {
         >
           &times;
         </button>
-        <FavoriteModal title="EDIT" mode="edit" data={details} />
+        <FavoriteModal buttonTitle="EDIT" mode="edit" data={details} />
       </div>
     </li>
   );

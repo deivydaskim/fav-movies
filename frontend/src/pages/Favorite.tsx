@@ -43,7 +43,7 @@ const Favorite = () => {
         <h1 className="justify-self-start headline-l text-yellow-350">
           Favorite Movies
         </h1>
-        <FavoriteModal title={'Add New'} />
+        <FavoriteModal buttonTitle={'Add New'} />
       </div>
       <div className="bg-white/10 rounded-md py-1 px-2">
         <div className="flex sm:flex-row flex-col gap-2 justify-between">
