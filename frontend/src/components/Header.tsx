@@ -50,40 +50,79 @@ const Header: React.FC = () => {
     setSearchData(null);
   };
 
+  const baseStyle = 'px-4 py-2 rounded-md transition duration-300 ease-in-out';
+  const activeStyle = 'bg-white/20 text-white';
+  const inactiveStyle =
+    'bg-white/10 text-gray-300 hover:bg-white/30 hover:text-white';
+
+  const homeStyle =
+    location.pathname === '/'
+      ? `${baseStyle} ${activeStyle}`
+      : `${baseStyle} ${inactiveStyle}`;
+  const favoriteStyle =
+    location.pathname === '/favorite'
+      ? `${baseStyle} ${activeStyle}`
+      : `${baseStyle} ${inactiveStyle}`;
+
   return (
-    <header className="flex flex-col sm:flex-row sm:gap-10 gap-3 items-center lg:px-28 px-6">
-      <div>
-        <Link onClick={() => sessionStorage.clear()} to={`/`}>
-          <img src={logo} alt="Find movies logo" />
-        </Link>
-      </div>
-      <div className="flex-1 relative w-full">
-        <input
-          className="w-full pl-10 py-2 rounded-sm focus:outline-yellow-400 p-4 bg-slate-100 text-black"
-          placeholder="Search a Movie"
-          type="text"
-          ref={inputRef}
-          onInput={handleDebouncedSearch}
-          onBlur={resetSearch}
-        />
-        <button className="h-7 w-7 absolute left-2 top-1/2 -translate-y-1/2">
-          <img className="opacity-70" src={searchIcon} alt="Search icon" />
-        </button>
-        <SearchResults
-          resetSearch={resetSearch}
-          data={searchData}
-          loading={loading}
-          error={error}
-        />
-      </div>
-      {!isAuthenticated() ? (
-        <Link to="/auth?mode=login" className="">
-          <button>LOGIN</button>
-        </Link>
-      ) : (
-        <button onClick={handleLogout}>LOGOUT</button>
-      )}
-    </header>
+    <>
+      <header className="flex flex-col items-center gap-3 px-6 sm:flex-row sm:gap-10 lg:px-28">
+        <div>
+          <Link onClick={() => sessionStorage.clear()} to={`/`}>
+            <img src={logo} alt="Find movies logo" />
+          </Link>
+        </div>
+        <div className="relative w-full flex-1">
+          <input
+            className="w-full rounded-sm bg-slate-100 p-4 py-2 pl-10 text-black focus:outline-yellow-400"
+            placeholder="Search a Movie"
+            type="text"
+            ref={inputRef}
+            onInput={handleDebouncedSearch}
+            onBlur={resetSearch}
+          />
+          <button className="absolute left-2 top-1/2 h-7 w-7 -translate-y-1/2">
+            <img className="opacity-70" src={searchIcon} alt="Search icon" />
+          </button>
+          <SearchResults
+            resetSearch={resetSearch}
+            data={searchData}
+            loading={loading}
+            error={error}
+          />
+        </div>
+      </header>
+      <nav className="mt-4 flex items-center justify-between px-6 lg:px-28">
+        <ul className="flex gap-1">
+          <li>
+            <Link to="/" className={homeStyle}>
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link to="/favorite" className={favoriteStyle}>
+              Favorite list
+            </Link>
+          </li>
+        </ul>
+        {!isAuthenticated() ? (
+          <Link to="/auth?mode=login" className="">
+            <button
+              className={`${baseStyle} ${inactiveStyle} place-self-center`}
+            >
+              Login
+            </button>
+          </Link>
+        ) : (
+          <button
+            className={`${baseStyle} ${inactiveStyle}`}
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        )}
+      </nav>
+    </>
   );
 };
 
