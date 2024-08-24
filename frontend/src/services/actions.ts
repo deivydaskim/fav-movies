@@ -1,5 +1,32 @@
 import { ActionFunction, json } from 'react-router-dom';
 
+const handleResponseError = (response: Response) => {
+  if (response.status === 409) {
+    return json(
+      { error: true, message: 'Username already exists.' },
+      { status: 409 },
+    );
+  }
+  if (response.status === 400) {
+    return json(
+      { error: true, message: 'Invalid credentials.' },
+      { status: 400 },
+    );
+  }
+  if (response.status === 401) {
+    return json(
+      { error: true, message: 'Unauthorized access.' },
+      { status: 401 },
+    );
+  }
+  if (!response.ok) {
+    throw json(
+      { error: true, message: 'Could not authenticate.' },
+      { status: 500 },
+    );
+  }
+};
+
 export const authAction: ActionFunction = async ({ request }) => {
   const searchParams = new URL(request.url).searchParams;
   const mode = searchParams.get('mode') || 'login';
@@ -10,25 +37,28 @@ export const authAction: ActionFunction = async ({ request }) => {
     password: data.get('password'),
   };
 
-  const response = await fetch('http://localhost:3000/auth/' + mode, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(authData),
-  });
+  let response: Response;
 
-  if (
-    response.status === 409 ||
-    response.status === 400 ||
-    response.status === 401
-  ) {
-    return response;
+  try {
+    response = await fetch(`http://localhost:3000/auth/${mode}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(authData),
+    });
+  } catch (error) {
+    return json(
+      {
+        error: true,
+        message: 'Server is not responding.',
+      },
+      { status: 500 },
+    );
   }
 
-  if (!response.ok) {
-    throw json({ message: 'Could not authentcicate' }, { status: 500 });
-  }
+  const errorResponse = handleResponseError(response);
+  if (errorResponse) return errorResponse;
 
   if (mode === 'register') {
     return json({ message: 'Registration successful, please log in.' });

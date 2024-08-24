@@ -36,7 +36,7 @@ const router = createBrowserRouter([
       {
         path: 'favorite',
         element: (
-          <ProtectedRoute redirectTo={'/'}>
+          <ProtectedRoute redirectTo={'/auth?mode=login'}>
             <Favorite />
           </ProtectedRoute>
         ),

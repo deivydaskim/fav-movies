@@ -6,18 +6,17 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 function AuthForm() {
   const [searchParams] = useSearchParams();
   const isLogin = searchParams.get('mode') === 'login';
+
   const data = useActionData() as AuthResponse;
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // Refs for clearing inputs
-  const usernameRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isError = data && 'error' in data;
   const isLoginSuccess = data && 'access_token' in data;
@@ -29,54 +28,60 @@ function AuthForm() {
       login(data.username, data.access_token);
       navigate('/');
     }
-    if (isRegistered) {
-      usernameRef!.current!.value = '';
-      passwordRef!.current!.value = '';
+    setIsLoading(false);
+  }, [data, isLoginSuccess, login, navigate]);
 
-      setTimeout(() => {
-        navigate('/auth?mode=login');
-      }, 3000);
-    }
-  }, [data, isLogin, isRegistered, isLoginSuccess, login, navigate]);
+  const handleSubmit = () => {
+    setIsLoading(true);
+  };
 
   return (
     <>
       <Form
         method="post"
-        className="flex flex-col gap-2 max-w-96 my-16 mx-auto gradient-gray py-6 px-10 rounded-xl"
+        className="mx-auto my-16 flex max-w-96 flex-col gap-2 rounded-xl px-10 py-6 gradient-gray"
+        onSubmit={handleSubmit}
       >
-        <h1 className="headline-m text-center">
+        <h1 className="text-center headline-m">
           {isLogin ? 'Login' : 'Register'}
         </h1>
         <p className="flex flex-col body">
           <label htmlFor="username">Username</label>
           <input
-            className="text-black px-2"
+            className="px-2 text-black rounded-sm"
             id="username"
             type="text"
             name="username"
             required
-            ref={usernameRef}
+            disabled={isLoading}
           />
         </p>
         <p className="flex flex-col body">
           <label htmlFor="password">Password</label>
           <input
-            className="text-black px-2"
+            className="px-2 text-black rounded-sm"
             id="password"
             type="password"
             name="password"
             required
-            ref={passwordRef}
+            disabled={isLoading}
           />
         </p>
         {isRegistered && <p className="text-green-500">{data.message}</p>}
         {isError && <p className="text-red-500">{data.message}</p>}
-        <div className="flex justify-between text-yellow-350 mt-4 [&>*]:bg-white/20 [&>*]:p-2 [&>*]:rounded-md">
-          <Link to={`?mode=${isLogin ? 'register' : 'login'}`}>
-            {isLogin ? 'Switch to Register' : 'Switch to Login'}
-          </Link>
-          <button type="submit">Submit</button>
+        <div className="mt-4 flex justify-between text-yellow-350 [&>*]:rounded-md [&>*]:bg-white/20 [&>*]:p-2">
+          {isLoading ? (
+            <div className="cursor-not-allowed opacity-70">
+              {isLogin ? 'Switch to Register' : 'Switch to Login'}
+            </div>
+          ) : (
+            <Link to={`?mode=${isLogin ? 'register' : 'login'}`}>
+              {isLogin ? 'Switch to Register' : 'Switch to Login'}
+            </Link>
+          )}
+          <button className='disabled:opacity-70' type="submit" disabled={isLoading}>
+            {isLoading ? 'Loading...' : 'Submit'}
+          </button>
         </div>
       </Form>
     </>
