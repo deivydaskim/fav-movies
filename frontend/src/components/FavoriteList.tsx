@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
 import { fetchMovies, clearCrudError } from '../store/favoriteSlice';
+import { useLocation, useNavigate } from 'react-router-dom';
 import FavoriteItem from './FavoriteItem';
 import Spinner from './Spinner';
 import Modal from './Modal';
 import Reconnect from './Reconnect';
+import Pagination from './Pagination';
+
+const MOVIES_PER_PAGE = 5;
 
 const FavoriteList: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -19,7 +23,13 @@ const FavoriteList: React.FC = () => {
 
   const [showPopup, setShowPopup] = useState(false);
 
-  //console.log(movies);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Extract page from URL query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const currentPage = +(queryParams.get('page') || '1');
+  const totalPages = Math.ceil(movies.length / MOVIES_PER_PAGE);
 
   useEffect(() => {
     if (movieStatus === 'idle') {
@@ -27,12 +37,17 @@ const FavoriteList: React.FC = () => {
     }
   }, [dispatch, movieStatus]);
 
-  // Show popup if there's a CRUD error
+  // Show Crud error if smth goes wrong
   useEffect(() => {
     if (crudError) {
       setShowPopup(true);
     }
   }, [crudError]);
+
+  // Sync url with current page
+  useEffect(() => {
+    navigate({ search: `?page=${currentPage}` }, { replace: true });
+  }, [currentPage, navigate]);
 
   const handleClosePopup = () => {
     setShowPopup(false);
@@ -56,17 +71,32 @@ const FavoriteList: React.FC = () => {
     );
   }
 
+  // Filtering by search input
   const filteredMovies = movies.filter((movie) =>
     movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
+
+  // Calculate the start and end index for the current page
+  const startIndex = (currentPage - 1) * MOVIES_PER_PAGE;
+  const endIndex = startIndex + MOVIES_PER_PAGE;
+  const paginatedMovies = filteredMovies.slice(startIndex, endIndex);
+
   return (
     <>
       <ul className="my-2 space-y-2">
-        {filteredMovies.map((movie) => (
+        {paginatedMovies.map((movie) => (
           <FavoriteItem key={movie.id} details={movie} />
         ))}
       </ul>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => {
+          navigate({ search: `?page=${page}` });
+        }}
+      />
 
       <Modal onClose={handleClosePopup} isOpen={showPopup}>
         {crudError}
