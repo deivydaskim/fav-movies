@@ -32,7 +32,6 @@ export const addMovie = createAsyncThunk<FavMovie, FavMovie>(
   async (movie, { rejectWithValue }) => {
     try {
       const response = await addMovieApi(movie);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue('Failed to add the movie.');

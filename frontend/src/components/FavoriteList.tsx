@@ -37,17 +37,24 @@ const FavoriteList: React.FC = () => {
     }
   }, [dispatch, movieStatus]);
 
-  // Show Crud error if smth goes wrong
   useEffect(() => {
     if (crudError) {
       setShowPopup(true);
     }
   }, [crudError]);
 
-  // Sync url with current page
+  // Sync URL with current page
   useEffect(() => {
-    navigate({ search: `?page=${currentPage}` }, { replace: true });
+    navigate({ search: `?page=${currentPage}` });
   }, [currentPage, navigate]);
+
+  // Navigate to page 1 if searchQuery changes and is not empty
+  useEffect(() => {
+    if (searchQuery && currentPage !== 1) {
+      console.log('navigate');
+      navigate({ search: `?page=1` });
+    }
+  }, [searchQuery, currentPage, navigate]);
 
   const handleClosePopup = () => {
     setShowPopup(false);
@@ -76,6 +83,15 @@ const FavoriteList: React.FC = () => {
     movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
+  if (filteredMovies.length === 0) {
+    return (
+      <h2 className="mt-8 text-center text-gray-300 body">
+        {movies.length === 0
+          ? 'Favorite list is empty, add new movies'
+          : "Can't find anything"}
+      </h2>
+    );
+  }
 
   // Calculate the start and end index for the current page
   const startIndex = (currentPage - 1) * MOVIES_PER_PAGE;
