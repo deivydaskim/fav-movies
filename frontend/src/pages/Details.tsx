@@ -64,9 +64,8 @@ const Details = () => {
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.95, opacity: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
         <section className="mt-9 flex flex-col justify-between px-6 py-4 gradient-gray md:flex-row md:py-10 lg:px-28">

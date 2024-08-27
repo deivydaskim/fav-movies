@@ -10,7 +10,7 @@ const Home: React.FC = () => {
   return (
     <>
       {navigation.state === 'loading' && (
-        <div className="fixed inset-0 z-20 grid place-items-center bg-slate-800/30">
+        <div className="fixed inset-0 z-20 grid place-items-center bg-black/20">
           <Spinner />
         </div>
       )}
