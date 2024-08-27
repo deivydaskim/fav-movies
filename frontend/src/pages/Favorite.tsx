@@ -12,7 +12,7 @@ import { RootState } from '../store/store';
 const Favorite = () => {
   const dispatch = useDispatch();
   const searchQuery = useSelector(
-    (state: RootState) => state.movies.searchQuery
+    (state: RootState) => state.movies.searchQuery,
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,30 +38,30 @@ const Favorite = () => {
   };
 
   return (
-    <div className="lg:px-28 px-6">
-      <div className="flex mt-14 mb-5 justify-between items-end">
-        <h1 className="justify-self-start headline-l text-yellow-350">
+    <div className="px-6 lg:px-28">
+      <div className="mb-5 mt-14 flex items-end justify-between">
+        <h1 className="justify-self-start text-yellow-350 headline-l">
           Favorite Movies
         </h1>
         <FavoriteModal buttonTitle={'Add New'} />
       </div>
-      <div className="bg-white/10 rounded-md py-1 px-2">
-        <div className="flex sm:flex-row flex-col gap-2 justify-between">
+      <div className="rounded-md bg-white/10 px-2 py-1">
+        <div className="flex flex-col justify-between gap-2 sm:flex-row">
           <input
             onChange={handleSearchChange}
             value={searchQuery}
             type="text"
             placeholder="Search movies..."
-            className="h-10 sm:max-w-screen-sm pl-2 body-2 sm:flex-1 flex-0 bg-black text-yellow-350 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-350"
+            className="flex-0 h-10 rounded-md bg-black pl-2 text-yellow-350 body-2 focus:outline-none focus:ring-2 focus:ring-yellow-350 sm:max-w-screen-sm sm:flex-1"
           />
-          <div className="flex justify-end items-center flex-1 max-w-60 body-2">
+          <div className="flex max-w-60 flex-1 items-center justify-end body-2">
             <p className="">Sort by:</p>
             <select
               name="sorting"
               id="movies"
               defaultValue=""
               onChange={handleSortChange}
-              className="flex-1 h-10 pl-2 ml-2 bg-black text-yellow-350 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-350"
+              className="ml-2 h-10 flex-1 rounded-md bg-black pl-2 text-yellow-350 focus:outline-none focus:ring-2 focus:ring-yellow-350"
             >
               <option value="" disabled>
                 Select

@@ -93,7 +93,7 @@ const Header: React.FC = () => {
         </div>
       </header>
       <nav className="mt-4 flex items-center justify-between px-6 lg:px-28">
-        <ul className="flex gap-1">
+        <ul className="flex flex-shrink-0 flex-wrap gap-1">
           <li>
             <Link to="/" className={homeStyle}>
               Home

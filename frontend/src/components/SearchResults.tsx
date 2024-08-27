@@ -18,7 +18,7 @@ const SearchResults: React.FC<MediaListProps> = ({
     ? data.results
         .filter(
           (result) =>
-            result.media_type === 'movie' || result.media_type === 'tv'
+            result.media_type === 'movie' || result.media_type === 'tv',
         )
         .slice(0, 10)
     : [];
@@ -28,13 +28,13 @@ const SearchResults: React.FC<MediaListProps> = ({
   };
 
   return (
-    <div className="absolute z-10 rounded-sm top-11 w-full bg-[#212121]">
-      {loading && <p className="text-gray-400 p-2">Loading...</p>}
-      {error && <p className="text-gray-400 p-2">Something went wrong...</p>}
+    <div className="absolute top-11 z-10 w-full rounded-sm bg-[#212121]">
+      {loading && <p className="p-2 text-gray-400">Loading...</p>}
+      {error && <p className="p-2 text-gray-400">Something went wrong...</p>}
       {data && !loading && (
         <ul className="max-h-80 overflow-y-scroll">
           {filteredResults.length === 0 ? (
-            <p className="text-gray-400 p-2">Can't find media</p>
+            <p className="p-2 text-gray-400">Can't find media</p>
           ) : (
             filteredResults.map((result) => (
               <Link
@@ -55,7 +55,7 @@ const SearchResults: React.FC<MediaListProps> = ({
                       alt={getTitle(result)}
                     />
                   ) : (
-                    <div className="rounded-sm w-14 h-[84px] bg-slate-500 text-gray-900 text-xs text-center pt-3">
+                    <div className="h-[84px] w-14 rounded-sm bg-slate-500 pt-3 text-center text-xs text-gray-900">
                       No img
                     </div>
                   )}

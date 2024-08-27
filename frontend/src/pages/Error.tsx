@@ -15,7 +15,7 @@ const Error = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <h1 className="mt-10 mb-2 text-2xl text-gray-300">{title}</h1>
+      <h1 className="mb-2 mt-10 text-2xl text-gray-300">{title}</h1>
       <p>{error && message}</p>
       <p>{!error && 'Page is not existing'}</p>
       <img className="w-80" src={errorImg} alt="Error illustration" />

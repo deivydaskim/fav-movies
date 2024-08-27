@@ -4,7 +4,7 @@ import FavoriteFormField from './FavoriteFormField';
 interface FavoriteFormProps {
   formData: FavMovie;
   onInputChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
   onCancel: () => void;
   onSubmit: (e: React.FormEvent) => void;
@@ -53,17 +53,17 @@ const FavoriteForm: React.FC<FavoriteFormProps> = ({
           placeholder="Enter image URL"
         />
       </div>
-      <div className="flex justify-end gap-2 mt-4">
+      <div className="mt-4 flex justify-end gap-2">
         <button
           type="button"
-          className="border-[1px] text-black border-yellow-350 rounded-md px-4 py-1"
+          className="rounded-md border-[1px] border-yellow-350 px-4 py-1 text-black"
           onClick={onCancel}
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="text-yellow-350 bg-black px-4 py-1 rounded-md"
+          className="rounded-md bg-black px-4 py-1 text-yellow-350"
         >
           {mode === 'edit' ? 'Save' : 'Add'} Movie
         </button>

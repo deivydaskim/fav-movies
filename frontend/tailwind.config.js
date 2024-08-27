@@ -31,7 +31,7 @@ export default {
           'font-size': '40px',
           'letter-spacing': '0.25px',
           'text-transform': 'uppercase',
-          'line-height': '40px'
+          'line-height': '40px',
         },
         '.headline-l': {
           'font-weight': '700',

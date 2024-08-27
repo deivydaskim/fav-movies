@@ -48,7 +48,7 @@ function AuthForm() {
         <p className="flex flex-col body">
           <label htmlFor="username">Username</label>
           <input
-            className="px-2 text-black rounded-sm"
+            className="rounded-sm px-2 text-black"
             id="username"
             type="text"
             name="username"
@@ -59,7 +59,7 @@ function AuthForm() {
         <p className="flex flex-col body">
           <label htmlFor="password">Password</label>
           <input
-            className="px-2 text-black rounded-sm"
+            className="rounded-sm px-2 text-black"
             id="password"
             type="password"
             name="password"
@@ -79,7 +79,11 @@ function AuthForm() {
               {isLogin ? 'Switch to Register' : 'Switch to Login'}
             </Link>
           )}
-          <button className='disabled:opacity-70' type="submit" disabled={isLoading}>
+          <button
+            className="disabled:opacity-70"
+            type="submit"
+            disabled={isLoading}
+          >
             {isLoading ? 'Loading...' : 'Submit'}
           </button>
         </div>

@@ -12,10 +12,12 @@ const getAuthHeaders = () => ({
 
 export const fetchMoviesApi = () =>
   axios.get<FavMovie[]>(API_URL, getAuthHeaders());
+
 export const addMovieApi = (movie: FavMovie) => {
   const { id, ...destructedMovie } = movie;
   return axios.post<FavMovie>(API_URL, destructedMovie, getAuthHeaders());
 };
+
 export const updateMovieApi = (movieId: number, movie: FavMovie) => {
   const { id, ...destructedMovie } = movie;
   return axios.patch<FavMovie>(
@@ -24,5 +26,6 @@ export const updateMovieApi = (movieId: number, movie: FavMovie) => {
     getAuthHeaders(),
   );
 };
+
 export const deleteMovieApi = (id: number) =>
   axios.delete(`${API_URL}/${id}`, getAuthHeaders());

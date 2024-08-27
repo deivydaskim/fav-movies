@@ -7,6 +7,7 @@ import FavoriteItem from './FavoriteItem';
 import Spinner from './Spinner';
 import Reconnect from './Reconnect';
 import Pagination from './Pagination';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const MOVIES_PER_PAGE = 5;
 
@@ -41,7 +42,6 @@ const FavoriteList: React.FC = () => {
   // Navigate to page 1 if searchQuery changes and is not empty
   useEffect(() => {
     if (searchQuery && currentPage !== 1) {
-      console.log('navigate');
       navigate({ search: `?page=1` });
     }
   }, [searchQuery, currentPage, navigate]);
@@ -68,7 +68,7 @@ const FavoriteList: React.FC = () => {
     movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  // Show text if no content is visable
+  // Show text if no content is visible
   if (filteredMovies.length === 0) {
     return (
       <h2 className="mt-8 text-center text-gray-300 body">
@@ -86,11 +86,19 @@ const FavoriteList: React.FC = () => {
 
   return (
     <>
-      <ul className="my-2 space-y-2">
-        {paginatedMovies.map((movie) => (
-          <FavoriteItem key={movie.id} details={movie} />
-        ))}
-      </ul>
+      <AnimatePresence>
+        <motion.ul
+          key={currentPage}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="my-2 space-y-2"
+        >
+          {paginatedMovies.map((movie) => (
+            <FavoriteItem key={movie.id} details={movie} />
+          ))}
+        </motion.ul>
+      </AnimatePresence>
 
       <Pagination
         currentPage={currentPage}

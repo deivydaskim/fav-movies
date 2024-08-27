@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ModalProps {
   isOpen: boolean;
@@ -14,7 +15,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       }
     };
 
-    // Add the event listener when the modal is open
     if (isOpen) {
       document.addEventListener('keydown', handleKeyDown);
     }
@@ -24,9 +24,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
-
-  // Close modal if clicked outside
   const handleOutsideClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
@@ -34,20 +31,34 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   };
 
   return (
-    <div
-      className="fixed inset-0 z-20 flex items-center justify-center bg-black/50"
-      onClick={handleOutsideClick}
-    >
-      <div className="relative max-h-[80vh] w-full max-w-md overflow-y-auto rounded-lg bg-white p-4 text-black shadow-lg">
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-2 text-3xl text-gray-600"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-20 flex items-center justify-center bg-black/20"
+          onClick={handleOutsideClick}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
         >
-          &times;
-        </button>
-        {children}
-      </div>
-    </div>
+          <motion.div
+            className="relative max-h-[80vh] w-full max-w-md overflow-y-auto rounded-lg bg-white p-4 text-black shadow-lg"
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <button
+              onClick={onClose}
+              className="absolute right-4 top-2 text-3xl text-gray-600"
+            >
+              &times;
+            </button>
+            {children}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

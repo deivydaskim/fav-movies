@@ -3,13 +3,13 @@ import { getAuthToken } from '../utils/auth';
 import { fetchDataForDetails } from './MoviesAPI';
 
 export const movieLoader = async (
-  args: LoaderFunctionArgs
+  args: LoaderFunctionArgs,
 ): Promise<MovieDetails> => {
   return fetchDataForDetails<MovieDetails>('/movie', args);
 };
 
 export const seriesLoader = async (
-  args: LoaderFunctionArgs
+  args: LoaderFunctionArgs,
 ): Promise<SeriesDetails> => {
   return fetchDataForDetails<SeriesDetails>('/tv', args);
 };

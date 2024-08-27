@@ -6,7 +6,7 @@ interface FormFieldProps {
   name: string;
   value: string;
   onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
   placeholder?: string;
 }
@@ -21,10 +21,10 @@ const FormField: React.FC<FormFieldProps> = ({
 }) => {
   return (
     <div className="space-y-2">
-      <label className="text-gray-700 headline-m block">{label}</label>
+      <label className="block text-gray-700 headline-m">{label}</label>
       {type === 'textarea' ? (
         <textarea
-          className="body-2 text-black p-2 w-full border-[1px] rounded-md"
+          className="w-full rounded-md border-[1px] p-2 text-black body-2"
           name={name}
           value={value}
           onChange={onChange}
@@ -33,7 +33,7 @@ const FormField: React.FC<FormFieldProps> = ({
         />
       ) : (
         <input
-          className="body-2 text-black p-2 w-full border-[1px] rounded-md"
+          className="w-full rounded-md border-[1px] p-2 text-black body-2"
           type={type}
           name={name}
           value={value}

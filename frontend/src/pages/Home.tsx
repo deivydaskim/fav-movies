@@ -10,19 +10,19 @@ const Home: React.FC = () => {
   return (
     <>
       {navigation.state === 'loading' && (
-        <div className="fixed z-20 inset-0 grid place-items-center bg-slate-800/30">
+        <div className="fixed inset-0 z-20 grid place-items-center bg-slate-800/30">
           <Spinner />
         </div>
       )}
-      <div className="lg:px-28 px-6">
+      <div className="px-6 lg:px-28">
         <section className="mt-14">
-          <h1 className="headline-l text-yellow-350">Featured Today</h1>
+          <h1 className="text-yellow-350 headline-l">Featured Today</h1>
           <div>
             <FeaturedTabs />
           </div>
         </section>
         <section className="mt-14">
-          <h1 className="headline-l text-yellow-350">
+          <h1 className="text-yellow-350 headline-l">
             Premiers and announcments
           </h1>
           <div>

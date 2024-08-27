@@ -24,8 +24,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const timeLeft =
         new Date(expirationTime).getTime() - new Date().getTime();
 
-      console.log(timeLeft);
-
       if (timeLeft > 0) {
         return setTimeout(logout, timeLeft);
       }
