@@ -39,8 +39,10 @@ export const authAction: ActionFunction = async ({ request }) => {
 
   let response: Response;
 
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
   try {
-    response = await fetch(`http://localhost:3000/auth/${mode}`, {
+    response = await fetch(`${BACKEND_URL}/auth/${mode}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
