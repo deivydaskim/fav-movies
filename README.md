@@ -24,6 +24,26 @@ The Favorite Movies Application is a movie browsing and management platform. It 
 
 ## Installation
 
+### Using Docker
+
+1. **Clone the repository:**
+
+   `git clone https://github.com/deivydaskim/fav-movies.git`
+
+2. **Navigate to the directory:**
+
+   `cd fav-movies`
+
+3. **Create .env files in frontend and backend dirs based on .env.example ( Also get TMDB API access token )**
+
+4. **Build and start docker images based on docker-compose.yml**
+
+   `docker compose up --build`
+
+5. **Open client on Vite preview port:** [http://localhost:4173](http://localhost:4173)
+
+## Manual installation
+
 ### Backend Setup
 
 1. **Clone the repository:**
@@ -68,4 +88,4 @@ The Favorite Movies Application is a movie browsing and management platform. It 
 ## Access the Application
 
 - **Client:** [http://localhost:5173](http://localhost:5173)
-- **Backend API Documentation:** [http://localhost:3000/api](http://localhost:3000/api)
+- **Backend API Swagger:** [http://localhost:3000/api](http://localhost:3000/api)

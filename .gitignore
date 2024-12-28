@@ -53,5 +53,5 @@ backend/coverage/
 frontend/public/
 
 # Ignore Docker files (if you're using Docker)
-docker-compose.yml
-Dockerfile
+# docker-compose.yml
+# Dockerfile

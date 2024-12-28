@@ -9,6 +9,7 @@ interface FavoriteFormProps {
   onCancel: () => void;
   onSubmit: (e: React.FormEvent) => void;
   mode: 'edit' | 'add';
+  loading: boolean;
 }
 
 const FavoriteForm: React.FC<FavoriteFormProps> = ({
@@ -17,9 +18,13 @@ const FavoriteForm: React.FC<FavoriteFormProps> = ({
   onCancel,
   onSubmit,
   mode,
+  loading,
 }) => {
   return (
-    <form className="flex flex-col gap-4" onSubmit={onSubmit}>
+    <form
+      className={`flex flex-col gap-4 ${loading && 'opacity-70'}`}
+      onSubmit={onSubmit}
+    >
       <div className="flex flex-col gap-4">
         <FavoriteFormField
           label="Title"
@@ -58,14 +63,16 @@ const FavoriteForm: React.FC<FavoriteFormProps> = ({
           type="button"
           className="rounded-md border-[1px] border-yellow-350 px-4 py-1 text-black"
           onClick={onCancel}
+          disabled={loading}
         >
           Cancel
         </button>
         <button
           type="submit"
           className="rounded-md bg-black px-4 py-1 text-yellow-350"
+          disabled={loading}
         >
-          {mode === 'edit' ? 'Save' : 'Add'} Movie
+          {loading ? 'Submiting' : mode === 'edit' ? 'Save Movie' : 'Add Movie'}
         </button>
       </div>
     </form>

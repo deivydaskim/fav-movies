@@ -26,6 +26,7 @@ const FavoriteModal: React.FC<FavoriteModalProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<FavMovie>(data);
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const crudError = useSelector((state: RootState) => state.movies.crudError);
@@ -54,6 +55,7 @@ const FavoriteModal: React.FC<FavoriteModalProps> = ({
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (mode === 'add') {
         await dispatch(addMovie(formData)).unwrap();
@@ -64,6 +66,7 @@ const FavoriteModal: React.FC<FavoriteModalProps> = ({
     } catch (error) {
       console.error(`Failed to ${mode} movie:`, error);
     } finally {
+      setLoading(false);
       handleCloseModal();
     }
   };
@@ -88,6 +91,7 @@ const FavoriteModal: React.FC<FavoriteModalProps> = ({
           onSubmit={handleFormSubmit}
           onInputChange={handleInputChange}
           mode={mode}
+          loading={loading}
         />
       </Modal>
       <Modal onClose={handleClosePopup} isOpen={isError}>

@@ -1,7 +1,7 @@
 import { LoaderFunctionArgs } from 'react-router-dom';
 
-const ACCESS_TOKEN = import.meta.env.VITE_ACCESS_TOKEN;
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const ACCESS_TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
+const BASE_URL = import.meta.env.VITE_TMDB_BASE_URL;
 
 const defaultOptions = {
   method: 'GET',
